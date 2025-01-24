@@ -1,6 +1,6 @@
 // axios instance ile server'a request yapilacak servisler burada tanimlanacak
 import { apiClient } from "./client";
-import { Charachter } from "../types/Charachters";
+import { Character } from "../types/Charachters";
 import { Location } from "../types/Locations";
 
 export interface APIResponse<T> {
@@ -19,7 +19,7 @@ export const fetchCharacters = async (
   status?: "alive" | "dead" | "unknown", //karakterin durumu istege bağlı
   species?: string, //karakterin türü istege bağlı
   page: number = 1 //sayfa numarası
-): Promise<APIResponse<Charachter>> => {
+): Promise<APIResponse<Character>> => {
   const params: Record<string, string | number | undefined> = {
     //params sorgu parametrelerini içeren madde  //name, status, species, page
     //Bu, TypeScript'in bir nesne için tip belirleme yöntemidir.
@@ -37,7 +37,7 @@ export const fetchCharacters = async (
 
   console.log("API Params:", params); // Filtreleme çalışıyor mu kontrol et
 
-  const response = await apiClient.get<APIResponse<Charachter>>(`/character`, {
+  const response = await apiClient.get<APIResponse<Character>>(`/character`, {
     //karakter endpointe istek gönderir.
     params,
   });

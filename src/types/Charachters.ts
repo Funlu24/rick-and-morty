@@ -1,7 +1,7 @@
 // karakter tipleri burda tanımlanacak
 // ve export edilecek
 
-/*export interface Character {
+export interface Character {
   id: number;
   name: string;
   status: "alive" | "dead" | "unknown"; // Özel type güvenliği
@@ -15,4 +15,3 @@
   url: string;
   created: string;
 }
-*/
