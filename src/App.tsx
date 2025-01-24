@@ -3,6 +3,7 @@ import { fetchCharacters, fetchLocations } from "./api/service";
 import { Character } from "./types/Charachters";
 import { Location } from "./types/Locations";
 import "./App.css";
+import Card from "./components/card";
 
 function App() {
   const [characters, setCharacters] = useState<Character[]>([]); // Api den çekilen karakter
@@ -42,7 +43,7 @@ function App() {
   }, [searchTerm, selectedLocation]);
   // searchTerm veya selectedLocation değiştiğinde tekrar çalıştır
   // Duruma Göre Renk Belirleme
-  const getStatusColor = (status: string) => {
+  /*const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "alive":
         return "bg-green-500"; // Yeşil nokta
@@ -52,7 +53,7 @@ function App() {
         return "bg-gray-500"; // Bilinmeyenler için gri nokta
     }
   };
-
+*/
   return (
     <div className="bg-gray-900 text-white min-h-screen p-4">
       <h1 className="text-3xl font-bold text-center mb-4">
@@ -90,38 +91,13 @@ function App() {
       </div>
 
       {/* Karakterleri Listeleme (Mobil Uyumlu Grid) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {characters.length > 0 ? ( // Eğer karakterler varsa göster
-          characters.map((char) => (
-            <div
-              key={char.id}
-              className="border p-4 rounded shadow-lg bg-gray-800"
-            >
-              <img
-                src={char.image}
-                alt={char.name}
-                className="rounded w-full"
-              />
-              <h2 className="text-xl font-bold mt-2 flex items-center gap-2">
-                {char.name}
-                <span
-                  className={`w-3 h-3 rounded-full ${getStatusColor(
-                    char.status
-                  )}`}
-                ></span>
-              </h2>
-              <p>Status: {char.status}</p> {/* Karakterin yaşam durumu */}
-              <p>Species: {char.species}</p> {/* Karakterin türü */}
-              <p>Gender: {char.gender}</p> {/* Karakterin cinsiyeti */}
-              <p>Origin: {char.origin.name}</p> {/* Karakterin doğum yeri */}
-              <p>Location: {char.location.name}</p>{" "}
-              {/* Karakterin mevcut konumu */}
-            </div>
-          ))
+          characters.map((char) => <Card key={char.id} character={char} />)
         ) : (
-          <p className="text-center col-span-full text-xl">
+          <p className="text-center col-span-full text-xl text-gray-300">
             No characters found
-          </p> // Eğer karakter yoksa kullanıcıya mesaj göster
+          </p>
         )}
       </div>
     </div>
