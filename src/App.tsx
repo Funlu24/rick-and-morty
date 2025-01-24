@@ -41,19 +41,7 @@ function App() {
       setCharacters(filteredCharacters); // Filtrelenmiş karakterleri state'e kaydet
     });
   }, [searchTerm, selectedLocation]);
-  // searchTerm veya selectedLocation değiştiğinde tekrar çalıştır
-  // Duruma Göre Renk Belirleme
-  /*const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "alive":
-        return "bg-green-500"; // Yeşil nokta
-      case "dead":
-        return "bg-red-500"; // Kırmızı nokta
-      default:
-        return "bg-gray-500"; // Bilinmeyenler için gri nokta
-    }
-  };
-*/
+
   return (
     <div className="bg-gray-900 text-white min-h-screen p-4">
       <h1 className="text-3xl font-bold text-center mb-4">
