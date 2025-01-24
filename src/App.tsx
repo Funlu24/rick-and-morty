@@ -1,27 +1,45 @@
 import { useEffect, useState } from "react";
-import { fetchCharacters } from "./api/service"; //rick and morty api getirmek için
-import { Character } from "./types/Charachters"; //karakter tipi
-import "./App.css"; //Sayfa stilleri için
+import { fetchCharacters, fetchLocations } from "./api/service";
+import { Character } from "./types/Charachters";
+import { Location } from "./types/Locations";
+import "./App.css";
 
 function App() {
-  const [characters, setCharacters] = useState<Character[]>([]); //karakterlerin durumu set günceller ve başlangıçta boş bir dizi
-  useEffect(() => {
-    fetchCharacters().then((data) => setCharacters(data.results)); //karakterleri getirir ve set eder ve data.results ile karakterleri alır //fetchCharacters() fonksiyonu çağrılıyor ve dönen verinin results kısmı characters state'ine atanıyor.
-  }, []);
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [locations] = useState<{ id: number; name: string }[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
 
+  // 📌 **Lokasyonları Yükle**
+  useEffect(() => {
+    fetchLocations().then((data) => {
+      console.log("Fetched Locations:", data.results); // API'den dönen lokasyonları kontrol et
+      setLocations(data.results);
+    });
+  }, []);
+
+  // 📌 **Karakterleri Getir ve Filtrele**
   useEffect(() => {
     fetchCharacters().then((data) => {
-      const filteredCharacters = data.results.filter((char: Character) =>
-        char.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      let filteredCharacters = data.results;
+
+      // **İsim ile filtreleme**
+      if (searchTerm) {
+        filteredCharacters = filteredCharacters.filter((char: Character) =>
+          char.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      // **Lokasyon ile filtreleme**
+      if (selectedLocation) {
+        filteredCharacters = filteredCharacters.filter(
+          (char: Character) => char.location.name === selectedLocation
+        );
+      }
+
       setCharacters(filteredCharacters);
     });
-  }, [searchTerm]);
-
-  //tailwindcss ile stillendirilmiş filtrelemeyi buraya ekleyin mx_auto ortalama p-4 ise bolsuk bırakır kenralara
+  }, [searchTerm, selectedLocation]);
 
   return (
     <div className="bg-gray-900 text-white min-h-screen p-4">
@@ -46,16 +64,20 @@ function App() {
           onChange={(e) => setSelectedLocation(e.target.value)}
         >
           <option value="">All Locations</option>
-          {locations.map((loc) => (
-            <option key={loc.id} value={loc.name}>
-              {loc.name}
-            </option>
-          ))}
+          {locations.length > 0 ? (
+            locations.map((loc) => (
+              <option key={loc.id} value={loc.name}>
+                {loc.name}
+              </option>
+            ))
+          ) : (
+            <option disabled>Loading locations...</option> // Eğer liste boşsa bunu göster
+          )}
         </select>
       </div>
 
-      {/* 📌 **Karakterleri Listeleme** */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* 📌 **Karakterleri Listeleme (Mobil Uyumlu Grid)** */}
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {characters.length > 0 ? (
           characters.map((char) => (
             <div key={char.id} className="border p-4 rounded shadow-lg">
@@ -71,7 +93,6 @@ function App() {
               <p>Origin: {char.origin.name}</p>
               <p>Location: {char.location.name}</p>
             </div>
-            //ekrana karakterin adı, resmi, durumu, türü, cinsiyeti, doğum yeri ve yaşadığı yer bilgilerini yazdırır
           ))
         ) : (
           <p className="text-center col-span-full text-xl">
