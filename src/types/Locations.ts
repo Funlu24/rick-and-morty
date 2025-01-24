@@ -5,4 +5,7 @@ export interface Location {
   name: string;
   type: string;
   dimension: string;
+  residents: string[]; // Karakter URL'leri
+  url: string;
+  created: string;
 }
