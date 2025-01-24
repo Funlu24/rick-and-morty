@@ -49,19 +49,19 @@ function App() {
       </h1>
 
       {/* Filtreleme Alanı */}
-      <div className="mx-auto p-4 flex flex-col md:flex-row items-center gap-4 w-full max-w-4xl">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 max-w-4xl mx-auto">
         {" "}
         {/* Filtreleme konteyneri, mobilde dikey, büyük ekranlarda yatay hizalı */}
         {/* Arama Kutusu */}
         <input
           type="text"
           placeholder="Search character..."
-          className="p-2 border rounded w-full md:w-1/2 text-black"
+          className="p-3 border border-purple-500 rounded-lg w-full md:w-1/2 text-white bg-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-purple-400 focus:outline-none"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {/* Lokasyon Seçme Kutusu */}
         <select
-          className="p-2 border rounded w-full md:w-1/3 text-black"
+          className="p-3 border border-blue-500 rounded-lg w-full md:w-1/3 text-white bg-gray-800 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           value={selectedLocation}
           onChange={(e) => setSelectedLocation(e.target.value)}
         >
