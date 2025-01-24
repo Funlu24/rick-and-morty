@@ -1,6 +1,9 @@
 // karakter tipleri burda tanımlanacak
 // ve export edilecek
 
+import { apiClient } from "../api/client";
+import { APIResponse } from "../api/service";
+
 export interface Character {
   id: number;
   name: string;
@@ -15,3 +18,7 @@ export interface Character {
   url: string;
   created: string;
 }
+export const fetchCharacters = async (): Promise<APIResponse<Character>> => {
+  const response = await apiClient.get<APIResponse<Character>>("/character");
+  return response.data;
+};
