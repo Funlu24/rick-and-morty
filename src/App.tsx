@@ -5,41 +5,43 @@ import { Location } from "./types/Locations";
 import "./App.css";
 
 function App() {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [characters, setCharacters] = useState<Character[]>([]); // Api den çekilen karakter
+  const [locations, setLocations] = useState<Location[]>([]); //Api den çekilen locasyon
+  const [searchTerm, setSearchTerm] = useState<string>(""); //kullanıcının arama çubuguna yazdıgı
+  const [selectedLocation, setSelectedLocation] = useState<string>(""); //kullanıcın şeçtiği locasyonu saklar selected //SS
 
-  // 📌 **Lokasyonları Yükle**
+  // Lokasyonları Yükle
   useEffect(() => {
     fetchLocations().then((data) => {
-      console.log("Fetched Locations:", data.results);
-      setLocations(data.results);
+      // f
+      console.log("Fetched Locations:", data.results); // Konsola çekilen verileri yazdır
+      setLocations(data.results); // State'e lokasyon verilerini kaydet
     });
-  }, []);
+  }, []); //yalnıca 1 kez çalıstırır.
 
-  // 📌 **Karakterleri Getir ve Filtrele**
+  // Karakterleri Getir ve Filtrele
   useEffect(() => {
     fetchCharacters().then((data) => {
-      let filteredCharacters = data.results;
+      let filteredCharacters = data.results; // Çekilen karakterleri değişkene ata
 
       if (searchTerm) {
-        filteredCharacters = filteredCharacters.filter((char: Character) =>
-          char.name.toLowerCase().includes(searchTerm.toLowerCase())
+        filteredCharacters = filteredCharacters.filter(
+          (char: Character) =>
+            char.name.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtrele
         );
       }
 
       if (selectedLocation) {
         filteredCharacters = filteredCharacters.filter(
-          (char: Character) => char.location.name === selectedLocation
+          (char: Character) => char.location.name === selectedLocation // Seçilen lokasyona göre filtrele
         );
       }
 
-      setCharacters(filteredCharacters);
+      setCharacters(filteredCharacters); // Filtrelenmiş karakterleri state'e kaydet
     });
   }, [searchTerm, selectedLocation]);
-
-  // 📌 **Duruma Göre Renk Belirleme**
+  // searchTerm veya selectedLocation değiştiğinde tekrar çalıştır
+  // Duruma Göre Renk Belirleme
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "alive":
@@ -57,38 +59,39 @@ function App() {
         Rick and Morty Characters
       </h1>
 
-      {/* 📌 **Filtreleme Alanı** */}
+      {/* Filtreleme Alanı */}
       <div className="mx-auto p-4 flex flex-col md:flex-row items-center gap-4 w-full max-w-4xl">
-        {/* **Arama Kutusu** */}
+        {" "}
+        {/* Filtreleme konteyneri, mobilde dikey, büyük ekranlarda yatay hizalı */}
+        {/* Arama Kutusu */}
         <input
           type="text"
           placeholder="Search character..."
           className="p-2 border rounded w-full md:w-1/2 text-black"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-
-        {/* **Lokasyon Seçme Kutusu** */}
+        {/* Lokasyon Seçme Kutusu */}
         <select
           className="p-2 border rounded w-full md:w-1/3 text-black"
           value={selectedLocation}
           onChange={(e) => setSelectedLocation(e.target.value)}
         >
           <option value="">All Locations</option>
-          {locations.length > 0 ? (
+          {locations.length > 0 ? ( // Eğer lokasyonlar yüklendiyse
             locations.map((loc) => (
               <option key={loc.id} value={loc.name}>
                 {loc.name}
-              </option>
+              </option> // Lokasyon seçeneklerini oluştur
             ))
           ) : (
-            <option disabled>Loading locations...</option>
+            <option disabled>Loading locations...</option> // Lokasyonlar yüklenmiyorsa mesaj göster
           )}
         </select>
       </div>
 
-      {/* 📌 **Karakterleri Listeleme (Mobil Uyumlu Grid)** */}
+      {/* Karakterleri Listeleme (Mobil Uyumlu Grid) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-        {characters.length > 0 ? (
+        {characters.length > 0 ? ( // Eğer karakterler varsa göster
           characters.map((char) => (
             <div
               key={char.id}
@@ -107,17 +110,18 @@ function App() {
                   )}`}
                 ></span>
               </h2>
-              <p>Status: {char.status}</p>
-              <p>Species: {char.species}</p>
-              <p>Gender: {char.gender}</p>
-              <p>Origin: {char.origin.name}</p>
-              <p>Location: {char.location.name}</p>
+              <p>Status: {char.status}</p> {/* Karakterin yaşam durumu */}
+              <p>Species: {char.species}</p> {/* Karakterin türü */}
+              <p>Gender: {char.gender}</p> {/* Karakterin cinsiyeti */}
+              <p>Origin: {char.origin.name}</p> {/* Karakterin doğum yeri */}
+              <p>Location: {char.location.name}</p>{" "}
+              {/* Karakterin mevcut konumu */}
             </div>
           ))
         ) : (
           <p className="text-center col-span-full text-xl">
             No characters found
-          </p>
+          </p> // Eğer karakter yoksa kullanıcıya mesaj göster
         )}
       </div>
     </div>

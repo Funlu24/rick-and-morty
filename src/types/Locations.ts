@@ -12,7 +12,7 @@ export interface Location {
   url: string;
   created: string;
 }
-// 🚀 **Lokasyonları Getir**
+// Lokasyonları Getir
 export const fetchLocations = async (): Promise<APIResponse<Location>> => {
   const response = await apiClient.get<APIResponse<Location>>("/location");
   return response.data;
